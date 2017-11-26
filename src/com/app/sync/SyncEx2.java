@@ -1,19 +1,19 @@
-package com.app.ex;
+package com.app.sync;
 
-public class SyncEx {
+public class SyncEx2 {
 
 	private static class Counter {
 		private int count;
 
-		public int getCount() {
+		public synchronized int getCount() {
 			return count;
 		}
 
-		public void decrement() {
+		public synchronized void decrement() {
 			this.count -= 1;
 		}
 
-		public void increment() {
+		public synchronized void increment() {
 			this.count += 1;
 		}
 	}
@@ -23,13 +23,13 @@ public class SyncEx {
 
 		Runnable incrRun = ()->
 		{
-			for (int i = 0; i <= 100; i++)
+			for (int i = 0; i < 100; i++)
 				counter.increment();
 		};
 
 		Runnable decRun = () -> {
-			for (int i = 0; i <= 100; i++) {
-				counter.increment();
+			for (int i = 0; i < 100; i++) {
+				counter.decrement();
 			}
 		};
 
@@ -40,7 +40,7 @@ public class SyncEx {
 			decThread[i] = new Thread(decRun);
 
 			incThread[i].start();
-			// decThread[i].start();
+			decThread[i].start();
 		}
 
 		for (int i = 0; i < 100; i++) {
